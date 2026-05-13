@@ -22,14 +22,29 @@ const userSchema=new Schema({
     profileImageUrl:{
         type:String
     },
+    phoneNumber:{
+        type:String,
+        trim:true
+    },
+    website:{
+        type:String,
+        trim:true
+    },
+    occupation:{
+        type:String,
+        trim:true
+    },
     displayName:{
-        type:String
+        type:String,
+        trim:true
     },
     bio:{
-        type:String
+        type:String,
+        trim:true
     },
     location:{
-        type:String
+        type:String,
+        trim:true
     },
     theme:{
         type:String,

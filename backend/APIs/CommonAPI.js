@@ -78,12 +78,50 @@ commonRouter.get("/check-auth", verifyToken("USER", "AUTHOR", "ADMIN"), async (r
 });
 
 commonRouter.put("/profile", verifyToken("USER", "AUTHOR", "ADMIN"), async (req, res) => {
-  const { displayName, bio, location, theme, profileImageUrl } = req.body;
+  const {
+    firstName,
+    lastName,
+    email,
+    displayName,
+    bio,
+    location,
+    theme,
+    profileImageUrl,
+    phoneNumber,
+    website,
+    occupation,
+  } = req.body;
+
+  const normalizedEmail = email?.trim().toLowerCase();
+  if (normalizedEmail) {
+    const existingEmailUser = await userTypeModel.findOne({
+      email: normalizedEmail,
+      _id: { $ne: req.user.userId },
+    });
+
+    if (existingEmailUser) {
+      return res.status(409).json({ message: "Email is already used by another account" });
+    }
+  }
 
   const updatedUser = await userTypeModel
     .findByIdAndUpdate(
       req.user.userId,
-      { $set: { displayName, bio, location, theme, profileImageUrl } },
+      {
+        $set: {
+          firstName,
+          lastName,
+          email: normalizedEmail,
+          displayName,
+          bio,
+          location,
+          theme,
+          profileImageUrl,
+          phoneNumber,
+          website,
+          occupation,
+        },
+      },
       { new: true, runValidators: true },
     )
     .select("-password");

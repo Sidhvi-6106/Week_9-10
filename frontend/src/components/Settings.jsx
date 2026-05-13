@@ -21,26 +21,43 @@ function Settings() {
   const updateCurrentUser = useAuth((state) => state.updateCurrentUser);
   const settings = useSettings((state) => state.settings);
   const updateSettings = useSettings((state) => state.updateSettings);
+  const fullName = `${user?.firstName || ""} ${user?.lastName || ""}`.trim();
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
       theme: settings.theme,
-      displayName: settings.displayName || user?.displayName || `${user?.firstName || ""} ${user?.lastName || ""}`.trim(),
-      bio: settings.bio || user?.bio || "",
-      location: settings.location || user?.location || "",
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      email: user?.email || "",
+      phoneNumber: user?.phoneNumber || "",
+      displayName: user?.displayName || fullName,
+      occupation: user?.occupation || "",
+      website: user?.website || "",
+      profileImageUrl: user?.profileImageUrl || "",
+      bio: user?.bio || "",
+      location: user?.location || "",
     },
   });
 
   useEffect(() => {
+    const nextFullName = `${user?.firstName || ""} ${user?.lastName || ""}`.trim();
+
     reset({
       theme: settings.theme,
-      displayName: settings.displayName || user?.displayName || `${user?.firstName || ""} ${user?.lastName || ""}`.trim(),
-      bio: settings.bio || user?.bio || "",
-      location: settings.location || user?.location || "",
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      email: user?.email || "",
+      phoneNumber: user?.phoneNumber || "",
+      displayName: user?.displayName || nextFullName,
+      occupation: user?.occupation || "",
+      website: user?.website || "",
+      profileImageUrl: user?.profileImageUrl || "",
+      bio: user?.bio || "",
+      location: user?.location || "",
     });
   }, [reset, settings, user]);
 
   const saveSettings = async (data) => {
-    updateSettings(data);
+    updateSettings({ theme: data.theme });
 
     if (!isAuthenticated) {
       toast.success("Theme saved");
@@ -74,9 +91,46 @@ function Settings() {
             </select>
           </div>
 
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className={formGroup}>
+              <label className={labelClass}>First Name</label>
+              <input className={inputClass} placeholder="First name" {...register("firstName", { required: true })} />
+            </div>
+
+            <div className={formGroup}>
+              <label className={labelClass}>Last Name</label>
+              <input className={inputClass} placeholder="Last name" {...register("lastName")} />
+            </div>
+          </div>
+
+          <div className={formGroup}>
+            <label className={labelClass}>Email</label>
+            <input type="email" className={inputClass} placeholder="you@example.com" {...register("email", { required: true })} />
+          </div>
+
+          <div className={formGroup}>
+            <label className={labelClass}>Phone Number</label>
+            <input type="tel" className={inputClass} placeholder="+91 98765 43210" {...register("phoneNumber")} />
+          </div>
+
           <div className={formGroup}>
             <label className={labelClass}>Profile Name</label>
             <input className={inputClass} placeholder="Your display name" {...register("displayName")} />
+          </div>
+
+          <div className={formGroup}>
+            <label className={labelClass}>Occupation</label>
+            <input className={inputClass} placeholder="Student, developer, writer..." {...register("occupation")} />
+          </div>
+
+          <div className={formGroup}>
+            <label className={labelClass}>Website</label>
+            <input type="url" className={inputClass} placeholder="https://example.com" {...register("website")} />
+          </div>
+
+          <div className={formGroup}>
+            <label className={labelClass}>Profile Image URL</label>
+            <input type="url" className={inputClass} placeholder="https://example.com/avatar.png" {...register("profileImageUrl")} />
           </div>
 
           <div className={formGroup}>
