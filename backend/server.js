@@ -9,8 +9,15 @@ import { commonRouter } from './APIs/CommonAPI.js'
 import cors from 'cors'
 config() //process.env
 const app=exp()
+// app.use(cors({
+//     origin: ["http://localhost:5173", "https://your-frontend-url.onrender.com"],
+//     credentials: true
+// }));
 app.use(cors({
-    origin: ["http://localhost:5173", "https://your-frontend-url.onrender.com"],
+    origin: [
+        "http://localhost:5173", 
+        "https://week-9-10-4mcj.vercel.app" // Add your Vercel URL here
+    ],
     credentials: true
 }));
 // app.use(cors({origin:["http://localhost:5173"],credentials:true}));// credentials if attached then only we can recevie the cookie in the application of inspect 
