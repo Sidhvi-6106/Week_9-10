@@ -20,6 +20,20 @@ const userSchema=new Schema({
     profileImageUrl:{
         type:String
     },
+    displayName:{
+        type:String
+    },
+    bio:{
+        type:String
+    },
+    location:{
+        type:String
+    },
+    theme:{
+        type:String,
+        enum:["light","warm","dark"],
+        default:"light"
+    },
     role:{
         type:String,
         enum:["AUTHOR","USER","ADMIN"],

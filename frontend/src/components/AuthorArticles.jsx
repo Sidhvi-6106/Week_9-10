@@ -56,6 +56,11 @@ function AuthorArticles() {
     });
   };
 
+  const getAuthorName = (author) => {
+    if (!author) return "Author";
+    return `${author.firstName || ""} ${author.lastName || ""}`.trim() || author.email || "Author";
+  };
+
   if (loading) return <p className={loadingClass}>Loading articles...</p>;
   if (error) return <p className={errorClass}>{error}</p>;
 
@@ -71,6 +76,8 @@ function AuthorArticles() {
             <p className={articleMeta}>{article.category}</p>
 
             <p className={articleTitle}>{article.title}</p>
+
+            <p className={articleMeta}>By {getAuthorName(article.author)}</p>
 
             <p className={articleExcerpt}>{article.content.slice(0, 60)}...</p>
 

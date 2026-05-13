@@ -1,9 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate, useParams } from "react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { useAuth } from "../stores/authStore";
 
 import {
   formCard,
@@ -19,9 +18,7 @@ function EditArticle() {
   const location = useLocation();
   const navigate = useNavigate();
   const { id } = useParams();
-  const currentUser = useAuth((state) => state.currentUser);
-
-  const article = location.state;
+  const [article, setArticle] = useState(location.state || null);
 
   const {
     register,
@@ -31,6 +28,20 @@ function EditArticle() {
   } = useForm();
 
   // prefill form
+  useEffect(() => {
+    const loadArticle = async () => {
+      if (article) return;
+      try {
+        const res = await axios.get(`http://localhost:4000/user-api/article/${id}`, { withCredentials: true });
+        setArticle(res.data.payload);
+      } catch (err) {
+        toast.error(err.response?.data?.message || "Unable to load article");
+      }
+    };
+
+    loadArticle();
+  }, [article, id]);
+
   useEffect(() => {
     if (!article) return;
 
@@ -45,7 +56,6 @@ function EditArticle() {
         "http://localhost:4000/author-api/articles",
         {
           articleId: id,
-          author: currentUser?._id,
           ...data,
         },
         { withCredentials: true },

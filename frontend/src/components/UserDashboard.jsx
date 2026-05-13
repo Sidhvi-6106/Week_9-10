@@ -1,33 +1,13 @@
-// // import React from 'react'
-// // import {userAuth} from '../stores/authStore'
-// // import {useNavigate} from 'react-router'
-// // import { cardClass, primaryBtn } from '../styles/common.js'
-// // // import {Toaster} from 'react-hot-toast'
+function UserDashboard() {
+  return (
+    <div className="mx-auto max-w-5xl px-6 py-16">
+      <h1 className="text-3xl font-bold tracking-tight text-[#1d1d1f]">User Dashboard</h1>
+      <p className="mt-4 text-[#6e6e73]">Use the profile page to read articles and comment on them.</p>
+    </div>
+  )
+}
 
-// // function UserDashboard() {
-// //     const logout=userAuth(state=>state.logout)
-// //     const article=userAuth(state=>state.article)
-// //     const navigate=useNavigate()
-// //     const onLogout=async()=>{
-// //         //logout
-// //         await logout();
-// //         //navigate
-// //         navigate('/login')
-// //     }
-// //     const onArticles=async()=>{
-// //         await article();
-// //         navigate('/readArticle')
-// //     }
-// //   return (
-// //     <div>
-// //         <button onClick={onLogout}  className={primaryBtn}>Logout </button>
-// //         <div>
-// //             <button onClick={onArticles} className={cardClass}>Read Article {article}</button>
-// //             <p></p>
-// //         </div>
-// //     </div>
-// //   )
-// // }
+export default UserDashboard
 
 // // export default UserDashboard
 // import React, { useEffect } from 'react';
@@ -62,12 +42,12 @@
 
 // export default UserDashboard;
 
-import React from 'react'
+// import React from 'react'
 
-function UserDashboard() {
-  return (
-    <div>UserDashboard</div>
-  )
-}
+// function UserDashboard() {
+//   return (
+//     <div>UserDashboard</div>
+//   )
+// }
 
-export default UserDashboard
+// export default UserDashboard

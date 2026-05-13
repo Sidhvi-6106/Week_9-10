@@ -14,11 +14,13 @@ import {
 import { NavLink } from "react-router";
 import { useAuth } from "../stores/authStore";
 import { useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { toast } from "react-hot-toast";
 
 function Login() {
-  const { register, handleSubmit } = useForm();
+  const [searchParams] = useSearchParams();
+  const requestedRole = searchParams.get("role") === "author" ? "AUTHOR" : "USER";
+  const { register, handleSubmit } = useForm({ defaultValues: { role: requestedRole } });
   const login = useAuth((state) => state.login);
   const isAuthenticated = useAuth((state) => state.isAuthenticated);
   const currentUser = useAuth((state) => state.currentUser);
@@ -33,13 +35,17 @@ function Login() {
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && currentUser) {
       if (currentUser.role === "USER") {
-        toast.success("Loggedin successfully");
+        toast.success("Logged in successfully");
         navigate("/user-profile");
       }
       if (currentUser.role === "AUTHOR") {
+        toast.success("Logged in as author");
         navigate("/author-profile");
+      }
+      if (currentUser.role === "ADMIN") {
+        navigate("/admin-dashboard");
       }
     }
   }, [isAuthenticated, currentUser, navigate]);
@@ -53,6 +59,20 @@ function Login() {
         {/* error message */}
         {error && <p className={errorClass}>{error}</p>}
         <form onSubmit={handleSubmit(onUserLogin)}>
+          <div className="mb-5">
+            <p className={labelClass}>Login as</p>
+            <div className="mt-2 grid grid-cols-2 gap-3">
+              <label className="cursor-pointer rounded-lg border border-[#d2d2d7] bg-white px-4 py-3 text-sm font-semibold text-[#1d1d1f]">
+                <input type="radio" value="USER" className="mr-2 accent-[#0066cc]" {...register("role")} />
+                User
+              </label>
+              <label className="cursor-pointer rounded-lg border border-[#d2d2d7] bg-white px-4 py-3 text-sm font-semibold text-[#1d1d1f]">
+                <input type="radio" value="AUTHOR" className="mr-2 accent-[#0066cc]" {...register("role")} />
+                Author
+              </label>
+            </div>
+          </div>
+
           {/* Email */}
           <div className={formGroup}>
             <label className={labelClass}>Email</label>
@@ -62,7 +82,7 @@ function Login() {
           {/* Password */}
           <div className={formGroup}>
             <label className={labelClass}>Password</label>
-            <input type="password" {...register("password")} placeholder="••••••••" className={inputClass} />
+            <input type="password" {...register("password")} placeholder="Enter your password" className={inputClass} />
           </div>
 
           {/* Forgot password */}

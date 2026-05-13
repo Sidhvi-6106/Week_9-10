@@ -19,7 +19,8 @@ userRoute.post("/users", async (req, res) => {
 userRoute.get("/articles", verifyToken("USER"), async (req, res) => {
   //read articles of all authors which are active
   const articles = await ArticleModel.find({ isArticleActive: true })
-  .populate("comments.user","email Firstname");
+    .populate("author", "firstName lastName email")
+    .populate("comments.user", "firstName lastName email");
   //send res
   res.status(200).json({ message: "all articles", payload: articles });
 });
@@ -28,8 +29,8 @@ userRoute.get("/articles", verifyToken("USER"), async (req, res) => {
 userRoute.get("/article/:id", verifyToken("USER", "AUTHOR"), async (req, res) => {
   const article = await ArticleModel.findOne({ _id: req.params.id, isArticleActive: true }).populate(
     "author",
-    "firstName email",
-  );
+    "firstName lastName email",
+  ).populate("comments.user", "firstName lastName email");
 
   if (!article) {
     return res.status(404).json({ message: "Article not found" });
@@ -52,7 +53,9 @@ userRoute.put("/articles", verifyToken("USER"), async (req, res) => {
     { _id: articleId, isArticleActive: true },
     { $push: { comments: { user, comment } } },
     { new: true, runValidators: true },
-  );
+  )
+    .populate("author", "firstName lastName email")
+    .populate("comments.user", "firstName lastName email");
 
   //if article not found
   if (!articleWithComment) {

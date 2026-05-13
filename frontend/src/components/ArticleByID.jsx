@@ -26,20 +26,21 @@ function ArticleByID() {
   const navigate = useNavigate();
 
   const user = useAuth((state) => state.currentUser);
+  const isAuthenticated = useAuth((state) => state.isAuthenticated);
 
   const [article, setArticle] = useState(location.state || null);
+  const [hasInitialArticle] = useState(Boolean(location.state));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [comment, setComment] = useState("");
+  const [commenting, setCommenting] = useState(false);
 
   useEffect(() => {
-    if (article) return;
-
     const getArticle = async () => {
-      setLoading(true);
+      setLoading(!hasInitialArticle);
 
       try {
         const res = await axios.get(`http://localhost:4000/user-api/article/${id}`, { withCredentials: true });
-
         setArticle(res.data.payload);
       } catch (err) {
         setError(err.response?.data?.message || "Unable to load article");
@@ -49,7 +50,7 @@ function ArticleByID() {
     };
 
     getArticle();
-  }, [article, id]);
+  }, [hasInitialArticle, id]);
 
   const formatDate = (date) => {
     return new Date(date).toLocaleString("en-IN", {
@@ -59,7 +60,14 @@ function ArticleByID() {
     });
   };
 
-  // delete article
+  const getPersonName = (person, fallback) => {
+    if (!person) return fallback;
+    return `${person.firstName || ""} ${person.lastName || ""}`.trim() || person.email || fallback;
+  };
+
+  const authorId = article?.author?._id || article?.author;
+  const canManageArticle = user?.role === "AUTHOR" && authorId === user?._id;
+
   const deleteArticle = async () => {
     try {
       await axios.patch(
@@ -79,42 +87,95 @@ function ArticleByID() {
     navigate(`/edit-article/${articleObj._id}`, { state: articleObj });
   };
 
+  const submitComment = async (event) => {
+    event.preventDefault();
+    if (!comment.trim()) return;
+
+    setCommenting(true);
+    try {
+      const res = await axios.put(
+        "http://localhost:4000/user-api/articles",
+        { user: user._id, articleId: article._id, comment: comment.trim() },
+        { withCredentials: true },
+      );
+      setArticle(res.data.payload);
+      setComment("");
+      toast.success("Comment added");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Unable to add comment");
+    } finally {
+      setCommenting(false);
+    }
+  };
+
   if (loading) return <p className={loadingClass}>Loading article...</p>;
   if (error) return <p className={errorClass}>{error}</p>;
   if (!article) return null;
 
   return (
     <div className={articlePageWrapper}>
-      {/* Header */}
       <div className={articleHeader}>
         <span className={articleCategory}>{article.category}</span>
-
-        <h1 className={`${articleMainTitle} uppercase`}>{article.title}</h1>
+        <h1 className={articleMainTitle}>{article.title}</h1>
 
         <div className={articleAuthorRow}>
-          <div className={authorInfo}>✍️ {article.author?.firstName || "Author"}</div>
-
+          <div className={authorInfo}>By {getPersonName(article.author, "Author")}</div>
           <div>{formatDate(article.createdAt)}</div>
         </div>
       </div>
 
-      {/* Content */}
       <div className={articleContent}>{article.content}</div>
 
-      {/* AUTHOR actions */}
-      {user?.role === "AUTHOR" && (
+      {canManageArticle && (
         <div className={articleActions}>
           <button className={editBtn} onClick={() => editArticle(article)}>
             Edit
           </button>
-
           <button className={deleteBtn} onClick={deleteArticle}>
             Delete
           </button>
         </div>
       )}
 
-      {/* Footer */}
+      <section className="mt-12 border-t border-[#e8e8ed] pt-8">
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="text-2xl font-bold tracking-tight text-[#1d1d1f]">Comments</h2>
+          <span className="text-sm text-[#a1a1a6]">{article.comments?.length || 0} total</span>
+        </div>
+
+        {isAuthenticated && user?.role === "USER" && (
+          <form onSubmit={submitComment} className="mb-8">
+            <textarea
+              value={comment}
+              onChange={(event) => setComment(event.target.value)}
+              rows="4"
+              className="w-full rounded-lg border border-[#d2d2d7] bg-white px-4 py-3 text-sm text-[#1d1d1f] outline-none focus:border-[#0066cc] focus:ring-2 focus:ring-[#0066cc]/10"
+              placeholder="Share your thoughts about this article"
+            />
+            <button
+              type="submit"
+              disabled={commenting}
+              className="mt-3 rounded-full bg-[#0066cc] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#004499] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {commenting ? "Posting..." : "Post Comment"}
+            </button>
+          </form>
+        )}
+
+        <div className="space-y-4">
+          {(article.comments || []).length === 0 && (
+            <p className="text-sm text-[#a1a1a6]">No comments yet. Be the first reader to respond.</p>
+          )}
+
+          {(article.comments || []).map((item) => (
+            <div key={item._id} className="rounded-lg bg-[#f5f5f7] p-4">
+              <p className="text-sm font-semibold text-[#1d1d1f]">{getPersonName(item.user, "Reader")}</p>
+              <p className="mt-2 leading-7 text-[#424245]">{item.comment}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <div className={articleFooter}>Last updated: {formatDate(article.updatedAt)}</div>
     </div>
   );

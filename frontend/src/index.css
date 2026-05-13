@@ -1,1 +1,20 @@
 @import "tailwindcss";
+
+:root {
+  --page-bg: #ffffff;
+  --nav-bg: rgba(255, 255, 255, 0.9);
+}
+
+:root[data-theme="warm"] {
+  --page-bg: #fffaf0;
+  --nav-bg: rgba(255, 250, 240, 0.92);
+}
+
+:root[data-theme="dark"] {
+  --page-bg: #f3f4f6;
+  --nav-bg: rgba(17, 24, 39, 0.92);
+}
+
+body {
+  background: var(--page-bg);
+}

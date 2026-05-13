@@ -3,7 +3,7 @@
 // Inspired by apple.com — no gradients, no shadows, pure typography & spacing
 
 // ─── Layout ───────────────────────────────────────────
-export const pageBackground = "bg-white min-h-screen";
+export const pageBackground = "bg-[var(--page-bg)] min-h-screen";
 export const pageWrapper = "max-w-5xl mx-auto px-6 py-16";
 export const section = "mb-14";
 
@@ -38,12 +38,12 @@ export const submitBtn =
 
 // ─── Navbar ───────────────────────────────────────────
 export const navbarClass =
-  "bg-white/85 backdrop-blur-xl backdrop-saturate-150 border-b border-[#e8e8ed] px-8 h-[52px] flex items-center sticky top-0 z-50";
-export const navContainerClass = "max-w-5xl mx-auto w-full flex items-center justify-between";
+  "bg-[var(--nav-bg)] backdrop-blur-xl backdrop-saturate-150 border-b border-[#e8e8ed] min-h-[68px] flex items-center sticky top-0 z-50";
+export const navContainerClass = "max-w-7xl mx-auto w-full flex items-center justify-between px-6 sm:px-10";
 export const navBrandClass = "text-base font-semibold text-[#1d1d1f] tracking-tight";
-export const navLinksClass = "flex items-center gap-7";
-export const navLinkClass = "text-[0.8rem] text-[#6e6e73] hover:text-[#1d1d1f] transition-colors font-normal";
-export const navLinkActiveClass = "text-[0.8rem] text-[#0066cc] font-medium";
+export const navLinksClass = "flex items-center gap-3 sm:gap-6";
+export const navLinkClass = "text-[0.95rem] sm:text-base text-[#424245] hover:text-[#1d1d1f] transition-colors font-semibold";
+export const navLinkActiveClass = "text-[0.95rem] sm:text-base text-[#0066cc] font-bold";
 
 // ─── Article / Blog ───────────────────────────────────
 //export const articleGrid        = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[#e8e8ed] border border-[#e8e8ed] rounded-2xl overflow-hidden"

@@ -6,6 +6,7 @@ export const useAuth = create((set) => ({
   loading: false,
   isAuthenticated: false,
   error: null,
+  updateCurrentUser: (user) => set({ currentUser: user }),
   login: async (userCredObj) => {
     try {
       set({ loading: true, error: null });
@@ -13,6 +14,10 @@ export const useAuth = create((set) => ({
       const res = await axios.post("http://localhost:4000/common-api/login", userCredObj, {
         withCredentials: true,
       });
+
+      if (!res.data?.payload) {
+        throw new Error(res.data?.error || res.data?.message || "Login failed");
+      }
 
       set({
         loading: false,
@@ -26,7 +31,7 @@ export const useAuth = create((set) => ({
         loading: false,
         isAuthenticated: false,
         currentUser: null,
-        error: err.response?.data?.error || "Login failed",
+        error: err.response?.data?.error || err.message || "Login failed",
       });
     }
   },

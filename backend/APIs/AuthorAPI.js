@@ -19,7 +19,7 @@ authorRoute.post("/users", async (req, res) => {
 //Create article(protected route)
 authorRoute.post("/articles", verifyToken("AUTHOR"), async (req, res) => {
   //get article from req
-  let article = req.body;
+  let article = { ...req.body, author: req.user.userId };
 
   //create article document
   let newArticleDoc = new ArticleModel(article);
@@ -35,7 +35,11 @@ authorRoute.get("/articles/:authorId", verifyToken("AUTHOR"), async (req, res) =
   let aid = req.params.authorId;
 
   //read atricles by this author which are acticve
-  let articles = await ArticleModel.find({ author: aid, isArticleActive: true }).populate("author", "firstName email");
+  if (aid !== req.user.userId) {
+    return res.status(403).json({ message: "Forbidden. You can only view your own author articles" });
+  }
+
+  let articles = await ArticleModel.find({ author: aid, isArticleActive: true }).populate("author", "firstName lastName email");
   //send res
   res.status(200).json({ message: "articles", payload: articles });
 });
@@ -43,9 +47,9 @@ authorRoute.get("/articles/:authorId", verifyToken("AUTHOR"), async (req, res) =
 //edit article(protected route)
 authorRoute.put("/articles", verifyToken("AUTHOR"), async (req, res) => {
   //get modified article from req
-  let { articleId, title, category, content, author } = req.body;
+  let { articleId, title, category, content } = req.body;
   //find article
-  let articleOfDB = await ArticleModel.findOne({ _id: articleId, author: author });
+  let articleOfDB = await ArticleModel.findOne({ _id: articleId, author: req.user.userId });
   if (!articleOfDB) {
     return res.status(401).json({ message: "Article not found" });
   }

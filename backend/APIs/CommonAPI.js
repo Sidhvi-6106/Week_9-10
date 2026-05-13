@@ -8,18 +8,22 @@ export const commonRouter = exp.Router();
 
 //login
 commonRouter.post("/login", async (req, res) => {
-  //get user cred object
-  let userCred = req.body;
-  //call authenticate service
-  let { token, user } = await authenticate(userCred);
-  //save tokan as httpOnly cookie
-  res.cookie("token", token, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: false,
-  });
-  //send res
-  res.status(200).json({ message: "login success", payload: user });
+  try {
+    //get user cred object
+    let userCred = req.body;
+    //call authenticate service
+    let { token, user } = await authenticate(userCred);
+    //save token as httpOnly cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: false,
+    });
+    //send res
+    res.status(200).json({ message: "login success", payload: user });
+  } catch (err) {
+    res.status(err.status || 500).json({ error: err.message || "Login failed" });
+  }
 });
 
 //logout for User, Author and Admin
@@ -60,9 +64,32 @@ commonRouter.put("/change-password", async (req, res) => {
 
   res.status(200).json({ message: "Password changed successfully" });
 });
-commonRouter.get("/check-auth", verifyToken("USER", "AUTHOR", "ADMIN"), (req, res) => {
+commonRouter.get("/check-auth", verifyToken("USER", "AUTHOR", "ADMIN"), async (req, res) => {
+  const user = await userTypeModel.findById(req.user.userId).select("-password");
+  if (!user) {
+    return res.status(401).json({ message: "Account not found. Please login again" });
+  }
+
   res.status(200).json({
     message: "authenticated",
-    payload: req.user,
+    payload: user,
   });
+});
+
+commonRouter.put("/profile", verifyToken("USER", "AUTHOR", "ADMIN"), async (req, res) => {
+  const { displayName, bio, location, theme, profileImageUrl } = req.body;
+
+  const updatedUser = await userTypeModel
+    .findByIdAndUpdate(
+      req.user.userId,
+      { $set: { displayName, bio, location, theme, profileImageUrl } },
+      { new: true, runValidators: true },
+    )
+    .select("-password");
+
+  if (!updatedUser) {
+    return res.status(404).json({ message: "Account not found" });
+  }
+
+  res.status(200).json({ message: "profile updated", payload: updatedUser });
 });

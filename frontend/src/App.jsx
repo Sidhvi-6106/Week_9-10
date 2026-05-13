@@ -10,6 +10,8 @@ import AuthorArticles from "./components/AuthorArticles";
 import WriteArticle from "./components/WriteArticle";
 import { Toaster } from "react-hot-toast";
 import EditArticle from "./components/EditArticleForm";
+import Settings from "./components/Settings";
+import AdminDashboard from "./components/AdminDashboard";
 
 function App() {
   const routerObj = createBrowserRouter([
@@ -32,6 +34,14 @@ function App() {
         {
           path: "user-profile",
           element: <UserProfile />,
+        },
+        {
+          path: "settings",
+          element: <Settings />,
+        },
+        {
+          path: "admin-dashboard",
+          element: <AdminDashboard />,
         },
         {
           path: "author-profile",

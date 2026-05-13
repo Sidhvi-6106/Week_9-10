@@ -1,9 +1,8 @@
-import { NavLink, useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../stores/authStore";
 import {
   navbarClass,
   navContainerClass,
-  navBrandClass,
   navLinksClass,
   navLinkClass,
   navLinkActiveClass,
@@ -13,7 +12,6 @@ function Header() {
   const isAuthenticated = useAuth((state) => state.isAuthenticated);
   const user = useAuth((state) => state.currentUser);
   const logout = useAuth((state) => state.logout);
-
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -21,66 +19,59 @@ function Header() {
     navigate("/login");
   };
 
-  // decide profile route based on role
   const getProfilePath = () => {
     if (!user) return "/";
-
-    console.log("current user", user);
-    switch (user.role) {
-      case "AUTHOR":
-        return "/author-profile";
-      case "ADMIN":
-        return "/admin-profile";
-      default:
-        return "/user-profile";
-    }
+    if (user.role === "AUTHOR") return "/author-profile";
+    if (user.role === "ADMIN") return "/admin-dashboard";
+    return "/user-profile";
   };
+
+  const linkClass = ({ isActive }) => (isActive ? navLinkActiveClass : navLinkClass);
 
   return (
     <nav className={navbarClass}>
       <div className={navContainerClass}>
-        {/* Logo */}
-        <NavLink to="/" className={navBrandClass}>
-          MyBlog
+        <NavLink to="/" className="flex items-center gap-3">
+          <div className="grid h-11 w-11 place-items-center rounded-lg bg-[#0066cc] text-lg font-bold text-white">
+            B
+          </div>
+          <span className="hidden text-xl font-bold tracking-tight text-[#1d1d1f] sm:inline">Blog App</span>
         </NavLink>
 
         <ul className={navLinksClass}>
-          {/* Always visible */}
           <li>
-            <NavLink to="/" end className={({ isActive }) => (isActive ? navLinkActiveClass : navLinkClass)}>
+            <NavLink to="/" end className={linkClass}>
               Home
             </NavLink>
           </li>
 
-          {/* Not logged in */}
           {!isAuthenticated && (
             <>
               <li>
-                <NavLink to="/register" className={({ isActive }) => (isActive ? navLinkActiveClass : navLinkClass)}>
+                <NavLink to="/register" className={linkClass}>
                   Register
                 </NavLink>
               </li>
-
               <li>
-                <NavLink to="/login" className={({ isActive }) => (isActive ? navLinkActiveClass : navLinkClass)}>
+                <NavLink to="/login" className={linkClass}>
                   Login
                 </NavLink>
               </li>
             </>
           )}
 
-          {/* Logged in */}
           {isAuthenticated && (
             <>
               <li>
-                <NavLink
-                  to={getProfilePath()}
-                  className={({ isActive }) => (isActive ? navLinkActiveClass : navLinkClass)}
-                >
+                <NavLink to={getProfilePath()} className={linkClass}>
                   Profile
                 </NavLink>
               </li>
-
+              <li>
+                <NavLink to="/settings" className={linkClass}>
+                  Settings
+                </NavLink>
+              </li>
               <li>
                 <button className={navLinkClass} onClick={handleLogout}>
                   Logout

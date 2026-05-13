@@ -31,9 +31,12 @@ function WriteArticle() {
   const submitArticle = async (articleObj) => {
     setLoading(true);
 
-    //add authorId to articleObj
-    articleObj.author=currentUser._id;
     try {
+      if (!currentUser || currentUser.role !== "AUTHOR") {
+        toast.error("Only authors can publish articles");
+        return;
+      }
+
       await axios.post(
         "http://localhost:4000/author-api/articles",
         articleObj,

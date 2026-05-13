@@ -15,10 +15,12 @@ import {
 import { NavLink } from "react-router";
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 
 function Register() {
-  const { register, handleSubmit } = useForm();
+  const [searchParams] = useSearchParams();
+  const requestedRole = searchParams.get("role") === "author" ? "author" : "user";
+  const { register, handleSubmit } = useForm({ defaultValues: { role: requestedRole } });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
