@@ -62,12 +62,12 @@ function Login() {
           <div className="mb-5">
             <p className={labelClass}>Login as</p>
             <div className="mt-2 grid grid-cols-2 gap-3">
-              <label className="cursor-pointer rounded-lg border border-[#d2d2d7] bg-white px-4 py-3 text-sm font-semibold text-[#1d1d1f]">
-                <input type="radio" value="USER" className="mr-2 accent-[#0066cc]" {...register("role")} />
+              <label className="cursor-pointer rounded-lg border border-(--border-color) bg-(--input-bg) px-4 py-3 text-sm font-semibold text-(--text-main)">
+                <input type="radio" value="USER" className="theme-accent mr-2" {...register("role")} />
                 User
               </label>
-              <label className="cursor-pointer rounded-lg border border-[#d2d2d7] bg-white px-4 py-3 text-sm font-semibold text-[#1d1d1f]">
-                <input type="radio" value="AUTHOR" className="mr-2 accent-[#0066cc]" {...register("role")} />
+              <label className="cursor-pointer rounded-lg border border-(--border-color) bg-(--input-bg) px-4 py-3 text-sm font-semibold text-(--text-main)">
+                <input type="radio" value="AUTHOR" className="theme-accent mr-2" {...register("role")} />
                 Author
               </label>
             </div>

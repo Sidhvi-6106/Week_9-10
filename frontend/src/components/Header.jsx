@@ -32,10 +32,12 @@ function Header() {
     <nav className={navbarClass}>
       <div className={navContainerClass}>
         <NavLink to="/" className="flex items-center gap-3">
-          <div className="grid h-11 w-11 place-items-center rounded-lg bg-[#0066cc] text-lg font-bold text-white">
-            B
-          </div>
-          <span className="hidden text-xl font-bold tracking-tight text-[#1d1d1f] sm:inline">Blog App</span>
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR63-MFsRn0_jWL46D70ITZomtbQGr3Au9Stw&s"
+            className="h-18 w-18 pl-4 rounded-5xl object-contain"
+            alt="Blog App logo"
+          />
+          <span className="hidden text-xl font-bold tracking-tight text-(--text-main) sm:inline">Blog App</span>
         </NavLink>
 
         <ul className={navLinksClass}>

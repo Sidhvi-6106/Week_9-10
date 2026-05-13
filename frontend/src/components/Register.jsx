@@ -80,9 +80,9 @@ function Register() {
                   {...register("role")}
                   id="user"
                   value="user"
-                  className="accent-violet-600 w-4 h-4"
+                  className="theme-accent w-4 h-4"
                 />
-                <span className="text-sm text-stone-700 font-medium">User</span>
+                <span className="text-sm text-(--text-main) font-medium">User</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -90,9 +90,9 @@ function Register() {
                   {...register("role")}
                   id="author"
                   value="author"
-                  className="accent-violet-600 w-4 h-4"
+                  className="theme-accent w-4 h-4"
                 />
-                <span className="text-sm text-stone-700 font-medium">Author</span>
+                <span className="text-sm text-(--text-main) font-medium">Author</span>
               </label>
             </div>
           </div>
@@ -143,7 +143,7 @@ function Register() {
         {/* Footer note */}
         <p className={`${mutedText} text-center mt-5`}>
           Already have an account?{" "}
-          <NavLink to="/login" className="text-violet-600 hover:text-violet-500 font-medium">
+          <NavLink to="/login" className="text-(--accent-color) hover:text-(--accent-hover) font-medium">
             Sign in
           </NavLink>
         </p>

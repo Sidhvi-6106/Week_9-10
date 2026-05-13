@@ -1,8 +1,8 @@
 function UserDashboard() {
   return (
     <div className="mx-auto max-w-5xl px-6 py-16">
-      <h1 className="text-3xl font-bold tracking-tight text-[#1d1d1f]">User Dashboard</h1>
-      <p className="mt-4 text-[#6e6e73]">Use the profile page to read articles and comment on them.</p>
+      <h1 className="text-3xl font-bold tracking-tight text-(--text-main)">User Dashboard</h1>
+      <p className="mt-4 text-(--text-muted)">Use the profile page to read articles and comment on them.</p>
     </div>
   )
 }

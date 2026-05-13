@@ -1,6 +1,5 @@
 import { useAuth } from "../stores/authStore";
 import { useNavigate } from "react-router";
-import { toast } from "react-hot-toast";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSettings } from "../stores/settingsStore";
@@ -17,7 +16,6 @@ import {
 
 function UserProfile() {
   const user = useAuth((state) => state.currentUser);
-  const logout = useAuth((state) => state.logout);
   const settings = useSettings((state) => state.settings);
   const navigate = useNavigate();
 
@@ -51,12 +49,6 @@ function UserProfile() {
     });
   };
 
-  const onLogout = async () => {
-    await logout();
-    toast.success("Logged out successfully");
-    navigate("/login");
-  };
-
   const navigateToArticleByID = (articleObj) => {
     navigate(`/article/${articleObj._id}`, {
       state: articleObj,
@@ -76,19 +68,13 @@ function UserProfile() {
     <div className="mx-auto max-w-7xl px-6 py-10 sm:px-10">
       {error && <p className={errorClass}>{error}</p>}
 
-      <div className="mb-8 rounded-lg bg-[#f5f5f7] p-6">
-        <p className="text-sm font-semibold uppercase tracking-widest text-[#0066cc]">Reader Profile</p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight text-[#1d1d1f]">
+      <div className="mb-8 rounded-lg bg-[var(--surface-bg)] p-6">
+        <p className="text-sm font-semibold uppercase tracking-widest text-[var(--accent-color)]">Reader Profile</p>
+        <h1 className="mt-2 text-3xl font-bold tracking-tight text-[var(--text-main)]">
           {settings.displayName || user?.displayName || `${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Reader"}
         </h1>
-        {(settings.bio || user?.bio) && <p className="mt-3 max-w-3xl leading-7 text-[#424245]">{settings.bio || user.bio}</p>}
-        {(settings.location || user?.location) && <p className="mt-2 text-sm text-[#6e6e73]">{settings.location || user.location}</p>}
-      </div>
-
-      <div className="flex justify-end mb-6 mt-3">
-        <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={onLogout}>
-          Logout
-        </button>
+        {(settings.bio || user?.bio) && <p className="mt-3 max-w-3xl leading-7 text-[var(--text-muted)]">{settings.bio || user.bio}</p>}
+        {(settings.location || user?.location) && <p className="mt-2 text-sm text-[var(--text-muted)]">{settings.location || user.location}</p>}
       </div>
 
       <div className={articleGrid}>
@@ -99,7 +85,7 @@ function UserProfile() {
               <div>
                 <p className={articleTitle}>{articleObj.title}</p>
 
-                <p className="text-sm text-[#6e6e73]">By {getAuthorName(articleObj.author)}</p>
+                <p className="text-sm text-[var(--text-muted)]">By {getAuthorName(articleObj.author)}</p>
 
                 <p>{articleObj.content.slice(0, 70)}...</p>
 
