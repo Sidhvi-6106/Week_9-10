@@ -14,13 +14,13 @@ function AuthorProfile() {
 
   return (
     <div className={pageWrapper}>
-      <div className="mb-8 rounded-lg bg-[var(--surface-bg)] p-6">
-        <p className="text-sm font-semibold uppercase tracking-widest text-[var(--accent-color)]">Author Profile</p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight text-[var(--text-main)]">
+      <div className="mb-8 rounded-lg bg-(--surface-bg) p-6">
+        <p className="text-sm font-semibold uppercase tracking-widest text-(--accent-color)">Author Profile</p>
+        <h1 className="mt-2 text-3xl font-bold tracking-tight text-(--text-main)">
           {settings.displayName || user?.displayName || `${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Author"}
         </h1>
-        {(settings.bio || user?.bio) && <p className="mt-3 max-w-3xl leading-7 text-[var(--text-muted)]">{settings.bio || user.bio}</p>}
-        {(settings.location || user?.location) && <p className="mt-2 text-sm text-[var(--text-muted)]">{settings.location || user.location}</p>}
+        {(settings.bio || user?.bio) && <p className="mt-3 max-w-3xl leading-7 text-(--text-muted)">{settings.bio || user.bio}</p>}
+        {(settings.location || user?.location) && <p className="mt-2 text-sm text-(--text-muted)">{settings.location || user.location}</p>}
       </div>
       
       {/* Author Navigation */}

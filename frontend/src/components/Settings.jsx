@@ -48,7 +48,7 @@ function Settings() {
     }
 
     try {
-      const res = await axios.put("http://localhost:4000/common-api/profile", data, { withCredentials: true });
+      const res = await axios.put("http://blog-app-backend-hdx7.onrender.com/common-api/profile", data, { withCredentials: true });
       updateCurrentUser(res.data.payload);
       toast.success("Settings saved");
     } catch (err) {

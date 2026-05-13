@@ -40,7 +40,7 @@ function ArticleByID() {
       setLoading(!hasInitialArticle);
 
       try {
-        const res = await axios.get(`http://localhost:4000/user-api/article/${id}`, { withCredentials: true });
+        const res = await axios.get(`http://blog-app-backend-hdx7.onrender.com/user-api/article/${id}`, { withCredentials: true });
         setArticle(res.data.payload);
       } catch (err) {
         setError(err.response?.data?.message || "Unable to load article");
@@ -71,7 +71,7 @@ function ArticleByID() {
   const deleteArticle = async () => {
     try {
       await axios.patch(
-        `http://localhost:4000/author-api/articles/${id}/status`,
+        `http://blog-app-backend-hdx7.onrender.com/author-api/articles/${id}/status`,
         { isArticleActive: false },
         { withCredentials: true },
       );
@@ -103,7 +103,7 @@ function ArticleByID() {
     setCommenting(true);
     try {
       const res = await axios.put(
-        "http://localhost:4000/user-api/articles",
+        "http://blog-app-backend-hdx7.onrender.com/user-api/articles",
         { user: user._id, articleId: article._id, comment: comment.trim() },
         { withCredentials: true },
       );
@@ -126,7 +126,7 @@ function ArticleByID() {
       <button
         type="button"
         onClick={goBackToArticles}
-        className="mb-8 inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] px-4 py-2 text-sm font-semibold text-[var(--text-main)] transition hover:bg-[var(--surface-bg)]"
+        className="mb-8 inline-flex items-center gap-2 rounded-full border border-(--border-color) px-4 py-2 text-sm font-semibold text-(--text-main) transition hover:bg-(--surface-bg)"
       >
         <span aria-hidden="true">&larr;</span>
         Back to Articles
@@ -155,10 +155,10 @@ function ArticleByID() {
         </div>
       )}
 
-      <section className="mt-12 border-t border-[var(--border-color)] pt-8">
+      <section className="mt-12 border-t border-(--border-color) pt-8">
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-bold tracking-tight text-[var(--text-main)]">Comments</h2>
-          <span className="text-sm text-[var(--text-soft)]">{article.comments?.length || 0} total</span>
+          <h2 className="text-2xl font-bold tracking-tight text-(--text-main)">Comments</h2>
+          <span className="text-sm text-(--text-soft)">{article.comments?.length || 0} total</span>
         </div>
 
         {isAuthenticated && user?.role === "USER" && (
@@ -167,13 +167,13 @@ function ArticleByID() {
               value={comment}
               onChange={(event) => setComment(event.target.value)}
               rows="4"
-              className="w-full rounded-lg border border-[var(--border-color)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--text-main)] outline-none focus:border-[var(--accent-color)] focus:ring-2 focus:ring-blue-500/10"
+              className="w-full rounded-lg border border-(--border-color) bg-(--input-bg) px-4 py-3 text-sm text-(--text-main) outline-none focus:border-(--accent-color) focus:ring-2 focus:ring-blue-500/10"
               placeholder="Share your thoughts about this article"
             />
             <button
               type="submit"
               disabled={commenting}
-              className="mt-3 rounded-full bg-[var(--accent-color)] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-60"
+              className="mt-3 rounded-full bg-(--accent-color) px-5 py-2 text-sm font-semibold text-white transition hover:bg-(--accent-hover) disabled:cursor-not-allowed disabled:opacity-60"
             >
               {commenting ? "Posting..." : "Post Comment"}
             </button>
@@ -182,13 +182,13 @@ function ArticleByID() {
 
         <div className="space-y-4">
           {(article.comments || []).length === 0 && (
-            <p className="text-sm text-[var(--text-soft)]">No comments yet. Be the first reader to respond.</p>
+            <p className="text-sm text-(--text-soft)">No comments yet. Be the first reader to respond.</p>
           )}
 
           {(article.comments || []).map((item) => (
-            <div key={item._id} className="rounded-lg bg-[var(--surface-bg)] p-4">
-              <p className="text-sm font-semibold text-[var(--text-main)]">{getPersonName(item.user, "Reader")}</p>
-              <p className="mt-2 leading-7 text-[var(--text-muted)]">{item.comment}</p>
+            <div key={item._id} className="rounded-lg bg-(--surface-bg) p-4">
+              <p className="text-sm font-semibold text-(--text-main)">{getPersonName(item.user, "Reader")}</p>
+              <p className="mt-2 leading-7 text-(--text-muted)">{item.comment}</p>
             </div>
           ))}
         </div>

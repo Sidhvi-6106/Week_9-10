@@ -38,7 +38,7 @@ function WriteArticle() {
       }
 
       await axios.post(
-        "http://localhost:4000/author-api/articles",
+        "http://blog-app-backend-hdx7.onrender.com/author-api/articles",
         articleObj,
         { withCredentials: true }
       );

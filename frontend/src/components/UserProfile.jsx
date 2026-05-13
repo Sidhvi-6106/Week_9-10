@@ -27,7 +27,7 @@ function UserProfile() {
     const getArticles = async () => {
       setLoading(true);
       try {
-        const res = await axios.get("http://localhost:4000/user-api/articles", { withCredentials: true });
+        const res = await axios.get("http://blog-app-backend-hdx7.onrender.com/user-api/articles", { withCredentials: true });
 
         setArticles(res.data.payload);
       } catch (err) {
@@ -68,9 +68,9 @@ function UserProfile() {
     <div className="mx-auto max-w-7xl px-6 py-10 sm:px-10">
       {error && <p className={errorClass}>{error}</p>}
 
-      <div className="mb-8 rounded-lg bg-[var(--surface-bg)] p-6">
-        <p className="text-sm font-semibold uppercase tracking-widest text-[var(--accent-color)]">Reader Profile</p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight text-[var(--text-main)]">
+      <div className="mb-8 rounded-lg bg-(--surface-bg) p-6">
+        <p className="text-sm font-semibold uppercase tracking-widest text-(--accent-color)">Reader Profile</p>
+        <h1 className="mt-2 text-3xl font-bold tracking-tight text-(--text-main)]">
           {settings.displayName || user?.displayName || `${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "Reader"}
         </h1>
         {(settings.bio || user?.bio) && <p className="mt-3 max-w-3xl leading-7 text-[var(--text-muted)]">{settings.bio || user.bio}</p>}
@@ -85,7 +85,7 @@ function UserProfile() {
               <div>
                 <p className={articleTitle}>{articleObj.title}</p>
 
-                <p className="text-sm text-[var(--text-muted)]">By {getAuthorName(articleObj.author)}</p>
+                <p className="text-sm text-(--text-muted)">By {getAuthorName(articleObj.author)}</p>
 
                 <p>{articleObj.content.slice(0, 70)}...</p>
 

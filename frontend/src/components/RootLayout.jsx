@@ -14,7 +14,7 @@ function RootLayout() {
     applyTheme();
   }, [checkAuth, applyTheme]);
   return (
-    <div className="bg-[var(--page-bg)] min-h-screen">
+    <div className="bg-(--page-bg) min-h-screen">
       <Header />
       <div className="min-h-screen">
         <Outlet />

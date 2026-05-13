@@ -32,7 +32,7 @@ function EditArticle() {
     const loadArticle = async () => {
       if (article) return;
       try {
-        const res = await axios.get(`http://localhost:4000/user-api/article/${id}`, { withCredentials: true });
+        const res = await axios.get(`http://blog-app-backend-hdx7.onrender.com/user-api/article/${id}`, { withCredentials: true });
         setArticle(res.data.payload);
       } catch (err) {
         toast.error(err.response?.data?.message || "Unable to load article");
@@ -53,7 +53,7 @@ function EditArticle() {
   const updateArticle = async (data) => {
     try {
       await axios.put(
-        "http://localhost:4000/author-api/articles",
+        "http://blog-app-backend-hdx7.onrender.com/author-api/articles",
         {
           articleId: id,
           ...data,
