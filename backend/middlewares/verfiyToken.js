@@ -5,8 +5,9 @@ config();
 export const verifyToken = (...allowedRoles) => {
   return async (req, res, next) => {
     try {
-      // Read token from cookie
-      const token = req.cookies.token;
+      // Read token from cookie, with Authorization fallback for cross-domain deployments.
+      const authHeader = req.headers.authorization;
+      const token = req.cookies.token || (authHeader?.startsWith("Bearer ") ? authHeader.split(" ")[1] : null);
       if (!token) {
         return res.status(401).json({ message: "Unauthorized. Please login" });
       }

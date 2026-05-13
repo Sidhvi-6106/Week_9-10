@@ -15,7 +15,7 @@ adminRoute.post('/adminlogin',async(req,res)=>{
             sameSite:"none",
             secure:true,
         });
-        res.status(200).json({message:"Admin Logged In",payload:user})
+        res.status(200).json({message:"Admin Logged In",payload:user, token})
     } catch (err) {
         res.status(err.status || 500).json({ error: err.message || "Admin login failed" });
     }

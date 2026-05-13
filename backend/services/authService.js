@@ -5,14 +5,19 @@ import {config} from "dotenv";
 config()
 //register function
 export const register =async(userObj)=>{
-const existingUser = await userTypeModel.findOne({ email: userObj.email });
+const normalizedUser = {
+    ...userObj,
+    email: userObj.email?.trim().toLowerCase(),
+};
+
+const existingUser = await userTypeModel.findOne({ email: normalizedUser.email });
 if (existingUser) {
     const err = new Error("Email already exists. Please login instead.");
     err.status = 409;
     throw err;
 }
 //create a document 
-const userDoc = new userTypeModel(userObj);
+const userDoc = new userTypeModel(normalizedUser);
 //validate for empty passwords
 await userDoc.validate();
 //hash and replace the password 
@@ -28,7 +33,8 @@ return newUserObj;
 };
 //authenticate function 
 export const authenticate =async({email,password,role})=>{
-    const user = await userTypeModel.findOne({ email });
+    const normalizedEmail = email?.trim().toLowerCase();
+    const user = await userTypeModel.findOne({ email: normalizedEmail });
     if (!user) {
     const err = new Error("Account not found. Please register first.");
     err.status = 401;
@@ -43,10 +49,15 @@ export const authenticate =async({email,password,role})=>{
 
     //compare passwords
     const isMatch=await bcrypt.compare(password,user.password);
-    if(!isMatch){
+    const isLegacyPlainTextPassword = user.password === password;
+    if(!isMatch && !isLegacyPlainTextPassword){
         const err = new Error("Invalid Password");
         err.status=401;
         throw err;
+    }
+    if (isLegacyPlainTextPassword) {
+        user.password = await bcrypt.hash(password, 10);
+        await user.save();
     }
     if(user.isActive==false){
         const err= new Error("Your Account is blocked Contact admin ");

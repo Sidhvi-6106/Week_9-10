@@ -21,7 +21,7 @@ commonRouter.post("/login", async (req, res) => {
       maxAge:24*60*60*1000
     });
     //send res
-    res.status(200).json({ message: "login success", payload: user });
+    res.status(200).json({ message: "login success", payload: user, token });
   } catch (err) {
     res.status(err.status || 500).json({ error: err.message || "Login failed" });
   }

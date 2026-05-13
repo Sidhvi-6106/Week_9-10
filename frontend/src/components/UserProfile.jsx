@@ -16,6 +16,8 @@ import {
 
 function UserProfile() {
   const user = useAuth((state) => state.currentUser);
+  const authLoading = useAuth((state) => state.loading);
+  const isAuthenticated = useAuth((state) => state.isAuthenticated);
   const settings = useSettings((state) => state.settings);
   const navigate = useNavigate();
 
@@ -24,21 +26,26 @@ function UserProfile() {
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
+    if (authLoading) return;
+
     const getArticles = async () => {
       setLoading(true);
+      setError(null);
+
       try {
         const res = await api.get("/user-api/articles");
 
-        setArticles(res.data.payload);
+        setArticles(res.data.payload || []);
       } catch (err) {
-        setError(err.response?.data?.error || "Something went wrong");
+        setArticles([]);
+        setError(err.response?.data?.message || err.response?.data?.error || "Unable to load articles");
       } finally {
         setLoading(false);
       }
     };
 
     getArticles();
-  }, []);
+  }, [authLoading, isAuthenticated]);
 
   // convert UTC → IST
   const formatDateIST = (date) => {
@@ -100,6 +107,12 @@ function UserProfile() {
           </div>
         ))}
       </div>
+
+      {!error && articles.length === 0 && (
+        <p className="mt-8 rounded-lg bg-(--surface-bg) p-6 text-center text-(--text-muted)">
+          No active articles are available to read right now.
+        </p>
+      )}
     </div>
   );
 }

@@ -3,8 +3,8 @@ import api from "../lib/api";
 
 export const useAuth = create((set) => ({
   currentUser: null,
-  loading: false,
-  isAuthenticated: false,
+  loading: true,
+  isAuthenticated: Boolean(localStorage.getItem("authToken")),
   error: null,
   updateCurrentUser: (user) => set({ currentUser: user }),
   login: async (userCredObj) => {
@@ -17,6 +17,10 @@ export const useAuth = create((set) => ({
         throw new Error(res.data?.error || res.data?.message || "Login failed");
       }
 
+      if (res.data?.token) {
+        localStorage.setItem("authToken", res.data.token);
+      }
+
       set({
         loading: false,
         isAuthenticated: true,
@@ -25,6 +29,7 @@ export const useAuth = create((set) => ({
       });
     } catch (err) {
       console.log("err is ", err);
+      localStorage.removeItem("authToken");
       set({
         loading: false,
         isAuthenticated: false,
@@ -37,6 +42,7 @@ export const useAuth = create((set) => ({
     try {
       set({ loading: true, error: null });
       await api.get("/common-api/logout");
+      localStorage.removeItem("authToken");
 
       set({
         loading: false,
@@ -45,6 +51,7 @@ export const useAuth = create((set) => ({
         error: null,
       });
     } catch (err) {
+      localStorage.removeItem("authToken");
       set({
         loading: false,
         isAuthenticated: false,
@@ -66,6 +73,7 @@ export const useAuth = create((set) => ({
       });
     } catch (err) {
       if (err.response?.status === 401) {
+        localStorage.removeItem("authToken");
         set({
           currentUser: null,
           isAuthenticated: false,
