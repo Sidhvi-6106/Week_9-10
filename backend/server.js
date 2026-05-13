@@ -14,11 +14,9 @@ const app=exp()
 //     credentials: true
 // }));
 app.use(cors({
-    origin: [
-        "http://localhost:5173", 
-        "https://week-9-10-4mcj.vercel.app" // Add your Vercel URL here
-    ],
-    credentials: true
+    origin: ["https://week-9-10-4mcj.vercel.app"], // Your Vercel URL
+    credentials: true, // Required for cookies/sessions
+    methods: ["GET", "POST", "PUT", "DELETE","OPTIONS"]
 }));
 // app.use(cors({origin:["http://localhost:5173"],credentials:true}));// credentials if attached then only we can recevie the cookie in the application of inspect 
 //connect to db

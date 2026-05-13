@@ -16,8 +16,9 @@ commonRouter.post("/login", async (req, res) => {
     //save token as httpOnly cookie
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "lax",
-      secure: false,
+      secure:true,
+      sameSite: "none",
+      maxAge:24*60*60*1000
     });
     //send res
     res.status(200).json({ message: "login success", payload: user });
