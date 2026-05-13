@@ -1,6 +1,6 @@
 import { useParams, useLocation, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../lib/api";
 import { useAuth } from "../stores/authStore";
 import { toast } from "react-hot-toast";
 
@@ -40,7 +40,7 @@ function ArticleByID() {
       setLoading(!hasInitialArticle);
 
       try {
-        const res = await axios.get(`http://blog-app-backend-hdx7.onrender.com/user-api/article/${id}`, { withCredentials: true });
+        const res = await api.get(`/user-api/article/${id}`);
         setArticle(res.data.payload);
       } catch (err) {
         setError(err.response?.data?.message || "Unable to load article");
@@ -70,10 +70,9 @@ function ArticleByID() {
 
   const deleteArticle = async () => {
     try {
-      await axios.patch(
-        `http://blog-app-backend-hdx7.onrender.com/author-api/articles/${id}/status`,
+      await api.patch(
+        `/author-api/articles/${id}/status`,
         { isArticleActive: false },
-        { withCredentials: true },
       );
 
       toast.success("Article deleted successfully");
@@ -102,10 +101,9 @@ function ArticleByID() {
 
     setCommenting(true);
     try {
-      const res = await axios.put(
-        "http://blog-app-backend-hdx7.onrender.com/user-api/articles",
+      const res = await api.put(
+        "/user-api/articles",
         { user: user._id, articleId: article._id, comment: comment.trim() },
-        { withCredentials: true },
       );
       setArticle(res.data.payload);
       setComment("");

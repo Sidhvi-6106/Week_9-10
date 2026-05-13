@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../lib/api";
 import { toast } from "react-hot-toast";
 
 import {
@@ -32,7 +32,7 @@ function EditArticle() {
     const loadArticle = async () => {
       if (article) return;
       try {
-        const res = await axios.get(`http://blog-app-backend-hdx7.onrender.com/user-api/article/${id}`, { withCredentials: true });
+        const res = await api.get(`/user-api/article/${id}`);
         setArticle(res.data.payload);
       } catch (err) {
         toast.error(err.response?.data?.message || "Unable to load article");
@@ -52,13 +52,12 @@ function EditArticle() {
 
   const updateArticle = async (data) => {
     try {
-      await axios.put(
-        "http://blog-app-backend-hdx7.onrender.com/author-api/articles",
+      await api.put(
+        "/author-api/articles",
         {
           articleId: id,
           ...data,
         },
-        { withCredentials: true },
       );
 
       toast.success("Article updated successfully");

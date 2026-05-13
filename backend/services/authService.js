@@ -5,6 +5,12 @@ import {config} from "dotenv";
 config()
 //register function
 export const register =async(userObj)=>{
+const existingUser = await userTypeModel.findOne({ email: userObj.email });
+if (existingUser) {
+    const err = new Error("Email already exists. Please login instead.");
+    err.status = 409;
+    throw err;
+}
 //create a document 
 const userDoc = new userTypeModel(userObj);
 //validate for empty passwords
@@ -23,8 +29,13 @@ return newUserObj;
 //authenticate function 
 export const authenticate =async({email,password,role})=>{
     const user = await userTypeModel.findOne({ email });
-    if (!user || (role && user.role !== role)) {
-    const err = new Error("Invalid email or role");
+    if (!user) {
+    const err = new Error("Account not found. Please register first.");
+    err.status = 401;
+    throw err;
+}
+    if (role && user.role !== role) {
+    const err = new Error(`This account is registered as ${user.role}. Please select the correct login role.`);
     err.status = 401;
     throw err;
 }

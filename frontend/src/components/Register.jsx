@@ -14,7 +14,7 @@ import {
 } from "../styles/common";
 import { NavLink } from "react-router";
 import { useState } from "react";
-import axios from "axios";
+import api from "../lib/api";
 import { useNavigate, useSearchParams } from "react-router";
 
 function Register() {
@@ -33,25 +33,25 @@ function Register() {
 
       if (role === "user") {
         //make API req to user-api
-        let resObj = await axios.post("http://blog-app-backend-hdx7.onrender.com/user-api/users", userObj);
+        let resObj = await api.post("/user-api/users", userObj);
         if (resObj.status === 201) {
           //navigate to login
-          navigate("/login");
+          navigate("/login?role=user");
         }
       }
       if (role === "author") {
         //make API req to author-api
         //make API req to user-api
-        let resObj = await axios.post("http://blog-app-backend-hdx7.onrender.com/author-api/users", userObj);
+        let resObj = await api.post("/author-api/users", userObj);
         console.log("res obj is ", resObj);
         if (resObj.status === 201) {
           //navigate to login
-          navigate("/login");
+          navigate("/login?role=author");
         }
       }
     } catch (err) {
      // console.log("err is ", err);
-      setError(err.response?.data?.error || "Registration failed");
+      setError(err.response?.data?.error || err.response?.data?.message || "Registration failed");
     } finally {
       setLoading(false);
     }

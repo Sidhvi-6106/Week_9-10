@@ -32,8 +32,8 @@ commonRouter.get("/logout", (req, res) => {
   // Clear the cookie named 'token'
   res.clearCookie("token", {
     httpOnly: true, // Must match original  settings
-    secure: false, // Must match original  settings
-    sameSite: "lax", // Must match original  settings
+    secure: true, // Must match original  settings
+    sameSite: "none", // Must match original  settings
   });
 
   res.status(200).json({ message: "Logged out successfully" });

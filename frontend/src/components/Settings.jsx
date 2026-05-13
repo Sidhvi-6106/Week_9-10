@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import axios from "axios";
+import api from "../lib/api";
 import { useAuth } from "../stores/authStore";
 import { useSettings } from "../stores/settingsStore";
 import {
@@ -48,7 +48,7 @@ function Settings() {
     }
 
     try {
-      const res = await axios.put("http://blog-app-backend-hdx7.onrender.com/common-api/profile", data, { withCredentials: true });
+      const res = await api.put("/common-api/profile", data);
       updateCurrentUser(res.data.payload);
       toast.success("Settings saved");
     } catch (err) {

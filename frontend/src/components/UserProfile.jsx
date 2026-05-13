@@ -1,6 +1,6 @@
 import { useAuth } from "../stores/authStore";
 import { useNavigate } from "react-router";
-import axios from "axios";
+import api from "../lib/api";
 import { useEffect, useState } from "react";
 import { useSettings } from "../stores/settingsStore";
 
@@ -27,7 +27,7 @@ function UserProfile() {
     const getArticles = async () => {
       setLoading(true);
       try {
-        const res = await axios.get("http://blog-app-backend-hdx7.onrender.com/user-api/articles", { withCredentials: true });
+        const res = await api.get("/user-api/articles");
 
         setArticles(res.data.payload);
       } catch (err) {

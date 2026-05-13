@@ -6,15 +6,19 @@ import { userTypeModel } from '../models/UserModel.js';
 export const adminRoute=exp.Router()
 //Authenticate admin
 adminRoute.post('/adminlogin',async(req,res)=>{
-    let admin=req.body;
-    let {token,adminlog}=await authenticate(admin)
+    try {
+        let admin={ ...req.body, role: "ADMIN" };
+        let {token,user}=await authenticate(admin)
         //save token as 
         res.cookie("token",token,{
             httpOnly:true,
-            sameSite:"lax",
-            secure:false,
+            sameSite:"none",
+            secure:true,
         });
-        res.status(200).json({message:"Admin Logged In",payload:adminlog})
+        res.status(200).json({message:"Admin Logged In",payload:user})
+    } catch (err) {
+        res.status(err.status || 500).json({ error: err.message || "Admin login failed" });
+    }
 })
 //read all articles,async
 adminRoute.get('/readarticles/:authorId',checkAuthor,async(req,res)=>{

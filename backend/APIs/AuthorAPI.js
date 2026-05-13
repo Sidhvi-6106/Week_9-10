@@ -8,12 +8,16 @@ export const authorRoute = exp.Router();
 
 //Register author(public)
 authorRoute.post("/users", async (req, res) => {
-  //get user obj from req
-  let userObj = req.body;
-  //call register
-  const newUserObj = await register({ ...userObj, role: "AUTHOR" });
-  //send res
-  res.status(201).json({ message: "authroe created", payload: newUserObj });
+  try {
+    //get user obj from req
+    let userObj = req.body;
+    //call register
+    const newUserObj = await register({ ...userObj, role: "AUTHOR" });
+    //send res
+    res.status(201).json({ message: "author created", payload: newUserObj });
+  } catch (err) {
+    res.status(err.status || 400).json({ message: "Registration failed", error: err.message });
+  }
 });
 
 //Create article(protected route)

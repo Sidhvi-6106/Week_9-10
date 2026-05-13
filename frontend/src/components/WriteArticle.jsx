@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import axios from "axios";
+import api from "../lib/api";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router";
 
@@ -37,11 +37,7 @@ function WriteArticle() {
         return;
       }
 
-      await axios.post(
-        "http://blog-app-backend-hdx7.onrender.com/author-api/articles",
-        articleObj,
-        { withCredentials: true }
-      );
+      await api.post("/author-api/articles", articleObj);
 
       toast.success("Article published successfully!");
 

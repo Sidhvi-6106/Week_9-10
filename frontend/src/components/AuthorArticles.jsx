@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../lib/api";
 import { useNavigate } from "react-router";
 import { useAuth } from "../stores/authStore";
 
@@ -29,7 +29,7 @@ function AuthorArticles() {
       setLoading(true);
 
       try {
-        const res = await axios.get(`http://blog-app-backend-hdx7.onrender.com/author-api/articles/${user._id}`, { withCredentials: true });
+        const res = await api.get(`/author-api/articles/${user._id}`);
 
         setArticles(res.data.payload);
       } catch (err) {

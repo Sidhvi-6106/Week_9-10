@@ -13,7 +13,7 @@ userRoute.post("/users", async (req, res) => {
     res.status(201).json({ message: "user created", payload: newUserObj });
   } catch (err) {
     console.error("Registration Error:", err);
-    res.status(500).json({ message: "Registration failed", error: err.message });
+    res.status(err.status || 400).json({ message: "Registration failed", error: err.message });
   }
 });
 

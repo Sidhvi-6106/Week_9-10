@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import axios from "axios";
+import api from "../lib/api";
 
 export const useAuth = create((set) => ({
   currentUser: null,
@@ -11,9 +11,7 @@ export const useAuth = create((set) => ({
     try {
       set({ loading: true, error: null });
 
-      const res = await axios.post("https://blog-app-backend-hdx7.onrender.com/common-api/login", userCredObj, {
-        withCredentials: true,
-      });
+      const res = await api.post("/common-api/login", userCredObj);
 
       if (!res.data?.payload) {
         throw new Error(res.data?.error || res.data?.message || "Login failed");
@@ -38,7 +36,7 @@ export const useAuth = create((set) => ({
   logout: async () => {
     try {
       set({ loading: true, error: null });
-      await axios.get("https://blog-app-backend-hdx7.onrender.com/common-api/logout", { withCredentials: true });
+      await api.get("/common-api/logout");
 
       set({
         loading: false,
@@ -58,7 +56,7 @@ export const useAuth = create((set) => ({
   checkAuth: async () => {
     try {
       set({ loading: true, error: null });
-      const res = await axios.get("https://blog-app-backend-hdx7.onrender.com/common-api/check-auth", { withCredentials: true });
+      const res = await api.get("/common-api/check-auth");
 
       set({
         currentUser: res.data.payload,
