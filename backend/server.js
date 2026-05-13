@@ -9,7 +9,11 @@ import { commonRouter } from './APIs/CommonAPI.js'
 import cors from 'cors'
 config() //process.env
 const app=exp()
-app.use(cors({origin:["http://localhost:5173"],credentials:true}));// credentials if attached then only we can recevie the cookie in the application of inspect 
+app.use(cors({
+    origin: ["http://localhost:5173", "https://your-frontend-url.onrender.com"],
+    credentials: true
+}));
+// app.use(cors({origin:["http://localhost:5173"],credentials:true}));// credentials if attached then only we can recevie the cookie in the application of inspect 
 //connect to db
 app.use(exp.json())
 //connect APIs
@@ -22,8 +26,15 @@ app.use('/common-api',commonRouter)
 const connectDB= async()=>{ //function expression 
     try{
     await connect(process.env.DB_URL)
-    console.log("DataBase Connection Success")
-    app.listen(process.env.PORT,()=>console.log("server Started"))
+    const port = process.env.PORT || 10000;
+// Start server FIRST so Render is happy
+app.listen(port, () => {
+    console.log(`Server started on port ${port}`);
+    // Then attempt DB connection in the background
+    connect(process.env.DB_URL)
+        .then(() => console.log("DataBase Connection Success"))
+        .catch(err => console.log("err in Db Connection", err));
+});
     }catch(err){
         console.log("err in Db Connection" ,err)
     }
