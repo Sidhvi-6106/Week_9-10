@@ -13,6 +13,7 @@ const app=exp()
 const allowedOrigins = [
     "http://localhost:5173",
     "https://week-9-10-4mcj.vercel.app",
+    "https://week-9-10-4mcj.vercel.app",
     ...(process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(",").map((origin) => origin.trim()) : []),
 ];
 
